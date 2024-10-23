@@ -1,0 +1,106 @@
+﻿schema {
+  query: Query
+  mutation: Mutation
+}
+
+interface Error {
+  message: String!
+}
+
+"The node interface is implemented by entities that have a global unique identifier."
+interface Node {
+  id: ID!
+}
+
+type AddToBasketPayload {
+  shoppingBasket: ShoppingBasket
+  errors: [AddToBasketError!]
+}
+
+type ChangeQuantityPayload {
+  shoppingBasket: ShoppingBasket
+  errors: [ChangeQuantityError!]
+}
+
+type ClearBasketPayload {
+  deleted: Boolean
+}
+
+type InvalidBasketItemId implements Error {
+  message: String!
+}
+
+type Mutation {
+  addToBasket(input: AddToBasketInput!): AddToBasketPayload! @cost(weight: "10")
+  changeQuantity(input: ChangeQuantityInput!): ChangeQuantityPayload! @cost(weight: "10")
+  removeFromBasket(input: RemoveFromBasketInput!): RemoveFromBasketPayload! @cost(weight: "10")
+  clearBasket: ClearBasketPayload! @cost(weight: "10")
+}
+
+type Product {
+  id: ID!
+}
+
+type QuantityCannotBeNegativeError implements Error {
+  message: String!
+}
+
+type Query {
+  "Fetches an object given its ID."
+  node("ID of the object." id: ID!): Node @cost(weight: "10")
+  "Lookup nodes by a list of IDs."
+  nodes("The list of node IDs." ids: [ID!]!): [Node]! @cost(weight: "10")
+  me: Viewer! @cost(weight: "10")
+  basketById(id: ID!): ShoppingBasket @cost(weight: "10")
+}
+
+type RemoveFromBasketPayload {
+  shoppingBasket: ShoppingBasket
+  errors: [RemoveFromBasketError!]
+}
+
+type ShoppingBasket implements Node {
+  id: ID!
+  customerId: String!
+  items: [ShoppingBasketItem!]!
+}
+
+type ShoppingBasketItem {
+  product: Product!
+  id: ID!
+  unitPrice: Float!
+  quantity: Int!
+}
+
+type Viewer {
+  basket: ShoppingBasket @cost(weight: "10")
+}
+
+union AddToBasketError = QuantityCannotBeNegativeError
+
+union ChangeQuantityError = QuantityCannotBeNegativeError | InvalidBasketItemId
+
+union RemoveFromBasketError = InvalidBasketItemId
+
+input AddToBasketInput {
+  productId: ID!
+  quantity: Int!
+  price: Float!
+}
+
+input ChangeQuantityInput {
+  id: ID!
+  quantity: Int!
+}
+
+input RemoveFromBasketInput {
+  id: ID!
+}
+
+"The purpose of the `cost` directive is to define a `weight` for GraphQL types, fields, and arguments. Static analysis can use these weights when calculating the overall cost of a query or response."
+directive @cost("The `weight` argument defines what value to add to the overall cost for every appearance, or possible appearance, of a type, field, argument, etc." weight: String!) on SCALAR | OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM | INPUT_FIELD_DEFINITION
+
+"The `@specifiedBy` directive is used within the type system definition language to provide a URL for specifying the behavior of custom scalar definitions."
+directive @specifiedBy("The specifiedBy URL points to a human-readable specification. This field will only read a result for scalar types." url: String!) on SCALAR
+
+scalar UUID @specifiedBy(url: "https:\/\/tools.ietf.org\/html\/rfc4122")

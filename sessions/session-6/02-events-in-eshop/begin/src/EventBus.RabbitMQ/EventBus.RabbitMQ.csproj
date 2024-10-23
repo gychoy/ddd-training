@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <RootNamespace>eShop.EventBus</RootNamespace>
+        <IsAotCompatible>true</IsAotCompatible>
+
+        <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" />
+        <PackageReference Include="Microsoft.Extensions.Logging" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+        <PackageReference Include="Polly" />
+        <PackageReference Include="RabbitMQ.Client" />
+        <PackageReference Include="OpenTelemetry.Api" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\EventBus\EventBus.csproj" />
+        <ProjectReference Include="..\IntegrationEvents.Abstractions\IntegrationEvents.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>

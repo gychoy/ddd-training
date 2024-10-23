@@ -1,0 +1,11 @@
+{
+  "subgraph": "catalog-api",
+  "http": {
+    "baseAddress": "http://localhost:5224/graphql"
+  },
+  "extensions": {
+    "nitro": {
+      "apiId": "QXBpCmcwYjMzMmI3ZGE0ZWE0ODQxOWE3N2I2MjViYmZmZDZkNA=="
+    }
+  }
+}

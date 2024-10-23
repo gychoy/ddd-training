@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Sdk Name="Aspire.AppHost.Sdk" Version="9.0.0-rc.1.24511.1"/>
+    
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsAspireHost>true</IsAspireHost>
+        <UserSecretsId>cef29f41-298d-4dd0-8a0b-23debaa12c75</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Hosting.AppHost"/>
+        <PackageReference Include="HotChocolate.Fusion.Aspire"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Gateway\Gateway.csproj"/>
+        <ProjectReference Include="..\Basket.API\Basket.API.csproj"/>
+        <ProjectReference Include="..\Catalog.API\Catalog.API.csproj"/>
+    </ItemGroup>
+
+</Project>

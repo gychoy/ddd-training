@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>eShop.Catalog.Infrastructure</RootNamespace>
+    <NoWarn>GD0001</NoWarn>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Catalog.Application\Catalog.Application.csproj" />
+    <ProjectReference Include="..\Catalog.Domain\Catalog.Domain.csproj" />
+    <ProjectReference Include="..\EventBus.RabbitMQ\EventBus.RabbitMQ.csproj" />
+    <ProjectReference Include="..\IntegrationEvents.EntityFramework.Postgres\IntegrationEvents.EntityFramework.Postgres.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Npgsql" />
+    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
+
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+    
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    
+    <PackageReference Include="GreenDonut" />
+    <PackageReference Include="HotChocolate.Pagination.EntityFramework" />
+    <PackageReference Include="HotChocolate.Pagination.Batching" />
+    
+    <PackageReference Include="HotChocolate.Types.Analyzers">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Migrations\catalog.json">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Migrations\catalog.json" />
+    <EmbeddedResource Include="Migrations\catalog.json" />
+  </ItemGroup>
+
+</Project>

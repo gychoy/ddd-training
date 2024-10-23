@@ -1,0 +1,308 @@
+﻿schema {
+  query: Query
+  mutation: Mutation
+}
+
+interface Error {
+  message: String!
+}
+
+"The node interface is implemented by entities that have a global unique identifier."
+interface Node {
+  id: ID!
+}
+
+type AddProductStockPayload {
+  product: Product
+  errors: [AddProductStockError!]
+}
+
+type Brand implements Node {
+  products("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String): BrandProductsConnection @listSize(assumedSize: 50, slicingArguments: [ "first", "last" ], sizedFields: [ "edges", "nodes" ]) @cost(weight: "10")
+  id: ID!
+  name: String!
+  totalProducts: Int!
+}
+
+type BrandNotFoundError implements Error {
+  message: String!
+  id: Int!
+}
+
+"A connection to a list of items."
+type BrandProductsConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [BrandProductsEdge!]
+  "A flattened list of the nodes."
+  nodes: [Product!]
+}
+
+"An edge in a connection."
+type BrandProductsEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Product!
+}
+
+"A connection to a list of items."
+type BrandsConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [BrandsEdge!]
+  "A flattened list of the nodes."
+  nodes: [Brand!]
+}
+
+"An edge in a connection."
+type BrandsEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Brand!
+}
+
+type ChangeProductPricePayload {
+  product: Product
+  errors: [ChangeProductPriceError!]
+}
+
+type CreateBrandPayload {
+  brand: Brand
+}
+
+type CreateProductPayload {
+  product: Product
+}
+
+type CreateProductTypePayload {
+  productType: ProductType
+}
+
+type Mutation {
+  createBrand(input: CreateBrandInput!): CreateBrandPayload! @cost(weight: "10")
+  renameBrand(input: RenameBrandInput!): RenameBrandPayload! @cost(weight: "10")
+  createProduct(input: CreateProductInput!): CreateProductPayload! @cost(weight: "10")
+  renameProduct(input: RenameProductInput!): RenameProductPayload! @cost(weight: "10")
+  changeProductPrice(input: ChangeProductPriceInput!): ChangeProductPricePayload! @cost(weight: "10")
+  addProductStock(input: AddProductStockInput!): AddProductStockPayload! @cost(weight: "10")
+  createProductType(input: CreateProductTypeInput!): CreateProductTypePayload! @cost(weight: "10")
+  renameProductType(input: RenameProductTypeInput!): RenameProductTypePayload! @cost(weight: "10")
+}
+
+"Information about pagination in a connection."
+type PageInfo {
+  "Indicates whether more edges exist following the set defined by the clients arguments."
+  hasNextPage: Boolean!
+  "Indicates whether more edges exist prior the set defined by the clients arguments."
+  hasPreviousPage: Boolean!
+  "When paginating backwards, the cursor to continue."
+  startCursor: String
+  "When paginating forwards, the cursor to continue."
+  endCursor: String
+}
+
+type Product implements Node {
+  brand: Brand @cost(weight: "10")
+  type: ProductType @cost(weight: "10")
+  id: ID!
+  name: String!
+  description: String
+  price: Decimal!
+  imageFileName: String
+  availableStock: Int!
+  restockThreshold: Int!
+  maxStockThreshold: Int!
+  onReorder: Boolean!
+}
+
+type ProductNotEnoughStockError implements Error {
+  message: String!
+  productId: Int!
+  availableStock: Int!
+  quantityDesired: Int!
+}
+
+type ProductNotFoundError implements Error {
+  message: String!
+  id: Int!
+}
+
+type ProductOutOfStockError implements Error {
+  message: String!
+  productId: Int!
+}
+
+type ProductType implements Node {
+  products("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String): ProductTypeProductsConnection @listSize(assumedSize: 50, slicingArguments: [ "first", "last" ], sizedFields: [ "edges", "nodes" ]) @cost(weight: "10")
+  id: ID!
+  name: String!
+  totalProducts: Int!
+}
+
+type ProductTypeNotFoundError implements Error {
+  message: String!
+  id: Int!
+}
+
+"A connection to a list of items."
+type ProductTypeProductsConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [ProductTypeProductsEdge!]
+  "A flattened list of the nodes."
+  nodes: [Product!]
+}
+
+"An edge in a connection."
+type ProductTypeProductsEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Product!
+}
+
+"A connection to a list of items."
+type ProductTypesConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [ProductTypesEdge!]
+  "A flattened list of the nodes."
+  nodes: [ProductType!]
+}
+
+"An edge in a connection."
+type ProductTypesEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: ProductType!
+}
+
+"A connection to a list of items."
+type ProductsConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [ProductsEdge!]
+  "A flattened list of the nodes."
+  nodes: [Product!]
+}
+
+"An edge in a connection."
+type ProductsEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Product!
+}
+
+type Query {
+  "Fetches an object given its ID."
+  node("ID of the object." id: ID!): Node @cost(weight: "10")
+  "Lookup nodes by a list of IDs."
+  nodes("The list of node IDs." ids: [ID!]!): [Node]! @cost(weight: "10")
+  brandById(id: ID!): Brand @cost(weight: "10")
+  brandByName(name: String!): Brand @cost(weight: "10")
+  brands("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String): BrandsConnection @listSize(assumedSize: 50, slicingArguments: [ "first", "last" ], sizedFields: [ "edges", "nodes" ]) @cost(weight: "10")
+  productById(id: ID!): Product @cost(weight: "10")
+  products(where: ProductsFilterInput "Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String): ProductsConnection @listSize(assumedSize: 50, slicingArguments: [ "first", "last" ], sizedFields: [ "edges", "nodes" ]) @cost(weight: "10")
+  productTypeById(id: ID!): ProductType @cost(weight: "10")
+  productTypeByName(name: String!): ProductType @cost(weight: "10")
+  productTypes("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String): ProductTypesConnection @listSize(assumedSize: 50, slicingArguments: [ "first", "last" ], sizedFields: [ "edges", "nodes" ]) @cost(weight: "10")
+}
+
+type RenameBrandPayload {
+  brand: Brand
+  errors: [RenameBrandError!]
+}
+
+type RenameProductPayload {
+  product: Product
+  errors: [RenameProductError!]
+}
+
+type RenameProductTypePayload {
+  productType: ProductType
+  errors: [RenameProductTypeError!]
+}
+
+union AddProductStockError = ProductOutOfStockError | ProductNotEnoughStockError
+
+union ChangeProductPriceError = ProductNotFoundError
+
+union RenameBrandError = BrandNotFoundError
+
+union RenameProductError = ProductNotFoundError
+
+union RenameProductTypeError = ProductTypeNotFoundError
+
+input AddProductStockInput {
+  id: ID!
+  quantity: Int!
+}
+
+input ChangeProductPriceInput {
+  id: ID!
+  newPrice: Decimal!
+}
+
+input CreateBrandInput {
+  name: String!
+}
+
+input CreateProductInput {
+  brandId: ID!
+  typeId: ID!
+  name: String!
+  description: String
+  initialPrice: Decimal!
+  restockThreshold: Int!
+  maxStockThreshold: Int!
+}
+
+input CreateProductTypeInput {
+  name: String!
+}
+
+input ProductsBrandIdFilterInput {
+  in: [Int!]
+}
+
+input ProductsFilterInput {
+  brandId: ProductsBrandIdFilterInput
+  typeId: ProductsTypeIdFilterInput
+}
+
+input ProductsTypeIdFilterInput {
+  in: [Int!]
+}
+
+input RenameBrandInput {
+  id: ID!
+  name: String!
+}
+
+input RenameProductInput {
+  id: ID!
+  newName: String!
+}
+
+input RenameProductTypeInput {
+  id: ID!
+  name: String!
+}
+
+"The purpose of the `cost` directive is to define a `weight` for GraphQL types, fields, and arguments. Static analysis can use these weights when calculating the overall cost of a query or response."
+directive @cost("The `weight` argument defines what value to add to the overall cost for every appearance, or possible appearance, of a type, field, argument, etc." weight: String!) on SCALAR | OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM | INPUT_FIELD_DEFINITION
+
+"The purpose of the `@listSize` directive is to either inform the static analysis about the size of returned lists (if that information is statically available), or to point the analysis to where to find that information."
+directive @listSize("The `assumedSize` argument can be used to statically define the maximum length of a list returned by a field." assumedSize: Int "The `slicingArguments` argument can be used to define which of the field's arguments with numeric type are slicing arguments, so that their value determines the size of the list returned by that field. It may specify a list of multiple slicing arguments." slicingArguments: [String!] "The `sizedFields` argument can be used to define that the value of the `assumedSize` argument or of a slicing argument does not affect the size of a list returned by a field itself, but that of a list returned by one of its sub-fields." sizedFields: [String!] "The `requireOneSlicingArgument` argument can be used to inform the static analysis that it should expect that exactly one of the defined slicing arguments is present in a query. If that is not the case (i.e., if none or multiple slicing arguments are present), the static analysis may throw an error." requireOneSlicingArgument: Boolean! = true) on FIELD_DEFINITION
+
+"The `Decimal` scalar type represents a decimal floating-point number."
+scalar Decimal

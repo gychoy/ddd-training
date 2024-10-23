@@ -1,0 +1,11 @@
+{
+  "subgraph": "basket",
+  "http": {
+    "baseAddress": "http://localhost:5095/graphql"
+  },
+  "extensions": {
+    "nitro": {
+      "apiId": "QXBpCmdlYWE5NTMwNDE3NGM0ZmJhOWQyZGU1MzA1MjRhZjMwMg=="
+    }
+  }
+}
